@@ -24,23 +24,20 @@
 #include "SPIFFS.h"
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+#include <Adafruit_GFX.h>    // Core graphics library
+#include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
+#include <Adafruit_ST7789.h> // Hardware-specific library for ST7789
+#include <SPI.h>
 
 AsyncWebServer server(80);
 
 // EINK Start - Remove if unnecessary
 #include "Adafruit_ThinkInk.h"
 
-#define EPD_CS      15
-#define EPD_DC      33
-#define SRAM_CS     32
-#define EPD_RESET   -1 // can set to -1 and share with microcontroller Reset!
-#define EPD_BUSY    -1 // can set to -1 to not use a pin (will wait a fixed delay)
-
-// 2.13" Monochrome displays with 250x122 pixels and SSD1675 chipset
-ThinkInk_213_Mono_B72 display(EPD_DC, EPD_RESET, EPD_CS, SRAM_CS, EPD_BUSY);
-
-// EINK End
-
+//Reject EPD, embrace TFT
+  #define TFT_CS         14
+  #define TFT_RST        15
+  #define TFT_DC         32
 
 // RTC Start - Remove if unnecessary
 #include "RTClib.h"
@@ -104,7 +101,17 @@ void setup() {
 
 void loop() {
   delay(LOOPDELAY);
+  UpdateVote()
 }
+
+void UpdateVote() {
+  int Alpha = 0
+  int Bravo = 0
+  int Charlie = 0
+  int Delta = 0
+  tft.print(
+}
+
 
 void logEvent(String dataToLog) {
   /*
@@ -129,22 +136,6 @@ void logEvent(String dataToLog) {
   Serial.println(logEntry);
 }
 
-void updateEPD() {
-  /*
-     "Draws" updates to the Eink (E Paper Display -EPD) display.
-     Configures all in memory and only writes to the display using 'display.display();'
-
-     Update this as necessary.
-  */
-
-  // Display IP Address
-  drawText(WiFi.localIP().toString(), EPD_BLACK, 1, 130, 80);
-
-
-  logEvent("Updating the EPD");
-  display.display();
-
-}
 
 void drawText(String text, uint16_t color, int textSize, int x, int y) {
   display.setCursor(x, y);
