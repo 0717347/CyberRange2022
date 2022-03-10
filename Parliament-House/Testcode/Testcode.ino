@@ -53,12 +53,12 @@ int CheckJoystick()
   if (joystickState < 250) return Press;
   if (joystickState < 500) return Right;
   if (joystickState < 650) return Up;
-  Serial.println(joystickState);
   return Neutral;
 }
 
 void checkVote() {
   int joyStick = CheckJoystick();
+  Serial.println(joyStick);
   switch (joyStick) {
     case Neutral:
       return;
